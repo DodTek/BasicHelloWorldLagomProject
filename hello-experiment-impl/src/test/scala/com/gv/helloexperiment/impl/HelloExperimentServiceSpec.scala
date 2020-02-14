@@ -21,7 +21,7 @@ class HelloExperimentServiceSpec extends AsyncWordSpec with Matchers with Before
   "Hello Experiment service" should {
 
     "say hello" in {
-      client.hello(1).invoke().map { answer =>
+      client.hello("1").invoke().map { answer =>
         answer should ===("Hello Alice")
       }
     }

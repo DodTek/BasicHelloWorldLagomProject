@@ -25,15 +25,16 @@ trait HelloExperimentService extends Service {
     * Example: curl http://localhost:9000/api/hello/Alice
     */
   private val serializer = new StringSerializer
-  def hello(id: Int): ServiceCall[NotUsed, String]
+  def hello(value: String): ServiceCall[NotUsed, String]
 
+  def endpointIsPalindrome(value: String): ServiceCall[NotUsed, Boolean]
   override final def descriptor: Descriptor = {
     import Service._
     // @formatter:off
     named("hello-experiment")
       .withCalls(
-        pathCall("/api/hello/:id", hello _),
-        //pathCall("/api/hello/:id", useGreeting _)
+        pathCall("/api/hello:id", hello _),
+        pathCall("/api/isPalindrome/:id", endpointIsPalindrome _)
       )
       .withAutoAcl(true)
     // @formatter:on

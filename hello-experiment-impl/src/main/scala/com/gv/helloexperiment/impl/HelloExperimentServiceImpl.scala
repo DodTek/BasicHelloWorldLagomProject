@@ -9,7 +9,7 @@ import com.lightbend.lagom.scaladsl.persistence.PersistentEntityRegistry
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import akka.util.Timeout
-
+import play.api.libs.json._
 /**
   * Implementation of the HelloExperimentService.
 */
@@ -18,9 +18,18 @@ class HelloExperimentServiceImpl(clusterSharding: ClusterSharding, persistentEnt
 
   implicit val timeout = Timeout(5.seconds)
 
-  override def hello(id: Int): ServiceCall[NotUsed, String] = ServiceCall {
+  override def endpointIsPalindrome(value: String): ServiceCall[NotUsed, Boolean] = ServiceCall {
     _ =>
-      if (id == 1) Future("Hello Alice")
-      else Future("Hello world")
+      val parList = List(value).flatMap(_.toUpperCase())
+      Future(Lists.isPalindrome(parList))
+  }
+
+  override def hello(value: String): ServiceCall[NotUsed, String] = ServiceCall {
+    _ =>
+      if(value.length > 3) Future("Hello " + value)
+      else Future("Hello World")
   }
 }
+
+case class parListClass(list: List[Any])
+
