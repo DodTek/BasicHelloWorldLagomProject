@@ -3,18 +3,14 @@ package com.gv.helloexperiment.api
 import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.api.{Descriptor, Service, ServiceCall}
-import play.api.libs.json.{Format, Json}
 
 object HelloExperimentService  {
   val TOPIC_NAME = "greetings"
 }
+
 /**
  * Creates class to use read in lists
  */
-case class Person(name: String, age: Int, address: String)
-  object Person {
-    implicit val format: Format[Person] = Json.format[Person]
-  }
 
 /**
   * The Hello Experiment service interface.
@@ -33,6 +29,8 @@ trait HelloExperimentService extends Service {
 
   def getPerson: ServiceCall[Person, String]
 
+  def getList: ServiceCall[InputListInt, String]
+
   override final def descriptor: Descriptor = {
     import Service._
     // @formatter:off
@@ -40,7 +38,8 @@ trait HelloExperimentService extends Service {
       .withCalls(
         pathCall("/api/hello:id", hello _),
         pathCall("/api/isPalindrome/:id", endpointIsPalindrome _),
-        restCall(Method.POST,"/api/getList/", getPerson _)
+        restCall(Method.POST,"/api/getPerson/", getPerson _),
+        restCall(Method.POST,"/api/getList/", getList _)
       )
       .withAutoAcl(true)
     // @formatter:on
