@@ -25,8 +25,16 @@ trait HelloExperimentService extends Service {
    */
   def hello(value: String): ServiceCall[NotUsed, String]
 
+  /**
+   * Example: curl http://localhost:9000/api/isPalindrome/1234321
+   */
   def endpointIsPalindrome(value: String): ServiceCall[NotUsed, Boolean]
 
+  /**
+   * Example: curl http://localhost:9000/api/getPerson
+   * @param Person
+   * @return String
+   */
   def getPerson: ServiceCall[Person, String]
 
   def getList: ServiceCall[InputListInt, String]
