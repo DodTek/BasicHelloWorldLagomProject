@@ -3,11 +3,11 @@ package com.gv.helloexperiment.api
 import akka.{Done, NotUsed}
 import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.api.{Descriptor, Service, ServiceCall}
+import play.api.libs.json.{Format, Json}
 
 object HelloExperimentService  {
   val TOPIC_NAME = "greetings"
 }
-
 /**
  * Creates class to use read in lists
  */
@@ -42,6 +42,11 @@ trait HelloExperimentService extends Service {
   def addToList: ServiceCall[Person, String]
 
   def returnList: ServiceCall[NotUsed, String]
+
+  def removeByPlace: ServiceCall[Int, NotUsed]
+
+  def removeByName: ServiceCall[String, String]
+
   override final def descriptor: Descriptor = {
     import Service._
     // @formatter:off
@@ -51,7 +56,10 @@ trait HelloExperimentService extends Service {
         restCall(Method.GET,"/api/isPalindrome/:id", endpointIsPalindrome _),
         restCall(Method.POST,"/api/getPerson/", getPerson _),
         restCall(Method.POST,"/api/getList/", getList _),
-        restCall(Method.POST,"/api/add/", addToList _)
+        restCall(Method.POST,"/api/add/", addToList _),
+        restCall(Method.GET,"/api/returnList/", returnList _),
+        restCall(Method.DELETE,"/api/remove/:id",removeByPlace _)
+
       )
       .withAutoAcl(true)
     // @formatter:on
