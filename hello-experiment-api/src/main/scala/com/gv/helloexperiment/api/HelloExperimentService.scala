@@ -1,10 +1,6 @@
 package com.gv.helloexperiment.api
 
 import akka.{Done, NotUsed}
-import com.fasterxml.jackson.databind.ser.std.StringSerializer
-import com.lightbend.lagom.scaladsl.api.broker.Topic
-import com.lightbend.lagom.scaladsl.api.broker.kafka.{KafkaProperties, PartitionKeyStrategy}
-import com.lightbend.lagom.scaladsl.api.deser.MessageSerializer
 import com.lightbend.lagom.scaladsl.api.transport.Method
 import com.lightbend.lagom.scaladsl.api.{Descriptor, Service, ServiceCall}
 import play.api.libs.json.{Format, Json}
@@ -29,19 +25,22 @@ case class Person(name: String, age: Int, address: String)
 trait HelloExperimentService extends Service {
 
   /**
-    * Example: curl http://localhost:9000/api/hello/Alice
-    */
-  private val serializer = new StringSerializer
+   * Example: curl http://localhost:9000/api/hello/Alice
+   */
   def hello(value: String): ServiceCall[NotUsed, String]
 
   def endpointIsPalindrome(value: String): ServiceCall[NotUsed, Boolean]
+
+  def getPerson: ServiceCall[Person, String]
+
   override final def descriptor: Descriptor = {
     import Service._
     // @formatter:off
     named("hello-experiment")
       .withCalls(
         pathCall("/api/hello:id", hello _),
-        pathCall("/api/isPalindrome/:id", endpointIsPalindrome _)
+        pathCall("/api/isPalindrome/:id", endpointIsPalindrome _),
+        restCall(Method.POST,"/api/getList/", getPerson _)
       )
       .withAutoAcl(true)
     // @formatter:on
