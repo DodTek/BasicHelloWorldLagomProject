@@ -1,6 +1,6 @@
 package com.gv.helloexperiment.impl
 
-import com.gv.helloexperiment.api.{HelloExperimentService, Lists, Person}
+import com.gv.helloexperiment.api.{HelloExperimentService, InputList, InputListInt, Lists, Person}
 import akka.NotUsed
 import akka.cluster.sharding.typed.scaladsl.ClusterSharding
 import com.lightbend.lagom.scaladsl.api.ServiceCall
@@ -30,9 +30,11 @@ class HelloExperimentServiceImpl(clusterSharding: ClusterSharding, persistentEnt
       else Future("Hello World")
   }
   override def getPerson : ServiceCall[Person, String] = { p =>
-    Future(p.name)
+    Future(s"My name is " + p.name + "I am " + p.age + " I live at " + p.address)
+  }
+
+  override def getList: ServiceCall[InputListInt, String] = {p =>
+    Future(Lists.randomSelectElement(4,p.list).toString())
   }
 }
-
-case class parListClass(list: List[Any])
 
