@@ -12,6 +12,13 @@ import play.api.libs.json.{Format, Json}
 object HelloExperimentService  {
   val TOPIC_NAME = "greetings"
 }
+/**
+ * Creates class to use read in lists
+ */
+case class Person(name: String, age: Int, address: String)
+  object Person {
+    implicit val format: Format[Person] = Json.format[Person]
+  }
 
 /**
   * The Hello Experiment service interface.
