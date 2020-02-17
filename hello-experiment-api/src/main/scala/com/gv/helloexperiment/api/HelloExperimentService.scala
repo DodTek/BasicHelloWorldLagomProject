@@ -32,22 +32,26 @@ trait HelloExperimentService extends Service {
 
   /**
    * Example: curl http://localhost:9000/api/getPerson
-   * @param Person
+   *
    * @return String
    */
   def getPerson: ServiceCall[Person, String]
 
   def getList: ServiceCall[InputListInt, String]
 
+  def addToList: ServiceCall[Person, String]
+
+  def returnList: ServiceCall[NotUsed, String]
   override final def descriptor: Descriptor = {
     import Service._
     // @formatter:off
     named("hello-experiment")
       .withCalls(
-        pathCall("/api/hello:id", hello _),
-        pathCall("/api/isPalindrome/:id", endpointIsPalindrome _),
+        restCall(Method.GET,"/api/hello:id", hello _),
+        restCall(Method.GET,"/api/isPalindrome/:id", endpointIsPalindrome _),
         restCall(Method.POST,"/api/getPerson/", getPerson _),
-        restCall(Method.POST,"/api/getList/", getList _)
+        restCall(Method.POST,"/api/getList/", getList _),
+        restCall(Method.POST,"/api/add/", addToList _)
       )
       .withAutoAcl(true)
     // @formatter:on

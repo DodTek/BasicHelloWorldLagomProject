@@ -36,5 +36,12 @@ class HelloExperimentServiceImpl(clusterSharding: ClusterSharding, persistentEnt
   override def getList: ServiceCall[InputListInt, String] = {p =>
     Future(Lists.randomSelectElement(4,p.list).toString())
   }
+  var PersonList: List[Person] = List(Person("BOB",21,"ads"))
+  override def addToList: ServiceCall[Person, String] = {p =>
+    PersonList ::: List(p)
+    Future("Added Person to List")
+  }
+
+  override def returnList: ServiceCall[NotUsed, String] = ???
 }
 
