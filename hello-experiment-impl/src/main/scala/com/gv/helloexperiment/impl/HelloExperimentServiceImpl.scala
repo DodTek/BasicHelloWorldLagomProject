@@ -1,6 +1,6 @@
 package com.gv.helloexperiment.impl
 
-import com.gv.helloexperiment.api.{HelloExperimentService, Lists}
+import com.gv.helloexperiment.api.{HelloExperimentService, Lists, Person}
 import akka.NotUsed
 import akka.cluster.sharding.typed.scaladsl.ClusterSharding
 import com.lightbend.lagom.scaladsl.api.ServiceCall
@@ -28,6 +28,9 @@ class HelloExperimentServiceImpl(clusterSharding: ClusterSharding, persistentEnt
     _ =>
       if(value.length > 3) Future("Hello " + value)
       else Future("Hello World")
+  }
+  override def getPerson : ServiceCall[Person, String] = { p =>
+    Future(p.name)
   }
 }
 
